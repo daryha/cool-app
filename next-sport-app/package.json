@@ -1,0 +1,35 @@
+{
+  "name": "next-sport-app",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@reduxjs/toolkit": "^2.7.0",
+    "axios": "^1.8.4",
+    "file-saver": "^2.0.5",
+    "lucide": "^0.487.0",
+    "lucide-react": "^0.487.0",
+    "motion": "^12.7.4",
+    "next": "15.2.5",
+    "next-sport-app": "file:",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-hook-form": "^7.55.0",
+    "react-redux": "^9.2.0",
+    "recharts": "^2.15.3"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "22.14.1",
+    "@types/react": "19.1.1",
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^3.4.17",
+    "typescript": "5.8.3"
+  }
+}
