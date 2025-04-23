@@ -115,6 +115,9 @@ using (var scope = app.Services.CreateScope())
     await CreateRolesAsync(rm, um);
 }
 
+
+
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
