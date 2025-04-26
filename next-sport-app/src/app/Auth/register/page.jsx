@@ -183,7 +183,7 @@ const RegisterPage = () => {
           <p className="text-sm text-gray-600 text-center mt-6">
             Уже есть аккаунт?{" "}
             <Link
-              href="/login"
+              href="/Auth/login"
               className="text-color-green font-medium hover:underline"
             >
               Войти

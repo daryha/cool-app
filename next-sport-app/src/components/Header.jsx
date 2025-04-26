@@ -9,6 +9,7 @@ import { Settings, User, LogOut, Menu } from "lucide-react";
 
 import Button from "../ui/button";
 import { logOut, selectIsAuth } from "../store/slice/authSlice";
+import logo from "./../../public/img/Logo.png";
 
 /* ─── основные ссылки ─── */
 const NAV_LINKS = [
@@ -44,7 +45,7 @@ const Header = () => {
         {/* ─── logo ─── */}
         <Link href="/" className="flex items-center gap-2">
           <Image
-            src="/img/logo.png"
+            src={logo}
             width={130}
             height={40}
             alt="logo"

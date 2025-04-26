@@ -3,7 +3,7 @@ import axios from "axios";
 import { useEffect } from "react";
 
 const instance = axios.create({
-  baseURL: "http://localhost:5000",
+  baseURL: "http://localhost:5124",
 });
 
 instance.interceptors.request.use((config) => {

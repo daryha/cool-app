@@ -11,6 +11,8 @@ namespace BookingSports.Services
         Task<IEnumerable<Booking>> GetBookingsForCoachAsync(string coachId);
         Task<Booking?>            GetBookingByIdAsync(string id);
 
+                Task<IEnumerable<Booking>> GetBookingsForFacilityAsync(string facilityId);   // ← добавили
+
         // проверка по площадке
         Task<Booking?>            GetBookingByFacilityAndTimeAsync(string? facilityId, DateTime date, TimeSpan startTime);
 
