@@ -1,6 +1,6 @@
 // src/redux/arenaSlice.js
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import axios from "../../axios";
 
 export const fetchArenas = createAsyncThunk(
   "arenas/fetchArenas",

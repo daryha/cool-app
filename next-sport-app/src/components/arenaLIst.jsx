@@ -14,7 +14,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const ITEMS_PER_PAGE = 10;
 
-const ArenaList = () => {
+const  ArenaList = () => {
   const dispatch = useDispatch();
   const arenas = useSelector(selectAllArenas);
   const loading = useSelector(selectArenasLoading);
