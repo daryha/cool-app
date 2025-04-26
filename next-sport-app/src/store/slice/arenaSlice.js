@@ -6,7 +6,7 @@ export const fetchArenas = createAsyncThunk(
   "arenas/fetchArenas",
   async (_, thunkAPI) => {
     try {
-      const response = await axios.get("http://localhost:5124/api/facilities"); 
+      const response = await axios.get("/api/facilities");
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);
