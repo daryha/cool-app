@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BookingSports")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+893b812ca9b342fb0e087bb423f319038b5d7b17")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+db1549f532a10b90491cc50e412103e1103a6ccf")]
 [assembly: System.Reflection.AssemblyProductAttribute("BookingSports")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BookingSports")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
