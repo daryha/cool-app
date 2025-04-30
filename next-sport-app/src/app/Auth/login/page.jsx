@@ -11,6 +11,9 @@ import {
 } from "../../../store/slice/authSlice";
 import React, { useEffect } from "react";
 
+import logoImg from "../../../../public/img/Logo.png";
+import Image from "next/image";
+
 const Page = () => {
   const dispatch = useDispatch();
   const router = useRouter();
@@ -55,8 +58,8 @@ const Page = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-color-green to-blue-100 px-4 ">
       <div className="bg-white shadow-2xl rounded-3xl overflow-hidden w-full max-w-4xl flex flex-col md:flex-row transition duration-300">
-        <div className="hidden md:block md:w-1/2 bg-cover bg-center">
-          <p>a</p>
+        <div className=" md:block md:w-1/2 bg-cover bg-center">
+          <Image src={logoImg} alt="lol" />
         </div>
 
         <div className="w-full md:w-1/2 p-10">

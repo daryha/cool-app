@@ -29,12 +29,12 @@ export default function RootLayout({ children }) {
   return (
     <html lang="ru">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${roboto.className} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${roboto.className} antialiased min-h-screen flex flex-col`}
       >
         <Providers>
           <ClientAuthProvider>
             <Header />
-            <main>{children}</main>
+            <main className="flex-grow flex-shrink-0">{children}</main>
             <Footer />
           </ClientAuthProvider>
         </Providers>

@@ -1,101 +1,175 @@
+// ArenaList.jsx - обновленная версия
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import CardItem from "./cardItem";
-import Search from "./SearchParam";
 import {
   fetchArenas,
   selectAllArenas,
   selectArenasLoading,
   selectArenasError,
 } from "./../store/slice/arenaSlice";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 
-const ITEMS_PER_PAGE = 10;
+// Импортируем наши новые компоненты
+import ArenaGrid from "./ArenaGrid";
+import Pagination from "./Pagination";
+import EmptyState from "./EmptyState";
+import ArenaListHeader from "./ArenaListHeader";
+import FilterPanel from "./FilterPanel";
+import SearchBar from "./SearchBar";
+import NoResults from "./NoResults";
 
-const  ArenaList = () => {
+const ITEMS_PER_PAGE = 9;
+
+const ArenaList = () => {
   const dispatch = useDispatch();
-  const arenas = useSelector(selectAllArenas);
+  const allArenas = useSelector(selectAllArenas);
   const loading = useSelector(selectArenasLoading);
   const error = useSelector(selectArenasError);
 
   const [page, setPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filters, setFilters] = useState({
+    priceMin: "",
+    priceMax: "",
+    sportTypes: [],
+    hasParking: false,
+    hasShower: false,
+    hasEquipment: false,
+  });
+  const [sortOption, setSortOption] = useState("default");
 
   useEffect(() => {
     dispatch(fetchArenas());
   }, [dispatch]);
 
-  const totalPages = Math.ceil(arenas.length / ITEMS_PER_PAGE);
-  const paginatedData = arenas.slice(
+  // Сброс на первую страницу при изменении фильтров или поиска
+  useEffect(() => {
+    setPage(1);
+  }, [searchQuery, filters, sortOption]);
+
+  // Применяем фильтры, поиск и сортировку
+  const filteredAndSortedArenas = useMemo(() => {
+    if (!allArenas.length) return [];
+
+    // Сначала применяем фильтры
+    let result = allArenas.filter((arena) => {
+      // Проверка по цене
+      if (filters.priceMin && arena.price < parseInt(filters.priceMin))
+        return false;
+      if (filters.priceMax && arena.price > parseInt(filters.priceMax))
+        return false;
+
+      // Проверка по типам спорта
+      if (filters.sportTypes.length > 0) {
+        const hasMatchingSportType = filters.sportTypes.some((type) =>
+          arena.sportTypes?.includes(type)
+        );
+        if (!hasMatchingSportType) return false;
+      }
+
+      // Проверка по удобствам
+      if (filters.hasParking && !arena.hasParking) return false;
+      if (filters.hasShower && !arena.hasShower) return false;
+      if (filters.hasEquipment && !arena.hasEquipment) return false;
+
+      return true;
+    });
+
+    // Затем применяем поиск
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      result = result.filter(
+        (arena) =>
+          arena.name?.toLowerCase().includes(query) ||
+          arena.address?.toLowerCase().includes(query) ||
+          arena.sportTypes?.some((type) => type.toLowerCase().includes(query))
+      );
+    }
+
+    // Наконец, сортировка
+    switch (sortOption) {
+      case "price-asc":
+        return [...result].sort((a, b) => a.price - b.price);
+      case "price-desc":
+        return [...result].sort((a, b) => b.price - a.price);
+      default:
+        return result;
+    }
+  }, [allArenas, filters, searchQuery, sortOption]);
+
+  // Пагинация
+  const paginatedData = filteredAndSortedArenas.slice(
     (page - 1) * ITEMS_PER_PAGE,
     page * ITEMS_PER_PAGE
   );
+  const totalPages = Math.ceil(filteredAndSortedArenas.length / ITEMS_PER_PAGE);
 
-  if (loading)
-    return <div className="text-center text-gray-500">Загрузка...</div>;
-  if (error)
-    return <div className="text-center text-red-500">Ошибка: {error}</div>;
+  // Сброс всех фильтров
+  const resetFilters = () => {
+    setSearchQuery("");
+    setFilters({
+      priceMin: "",
+      priceMax: "",
+      sportTypes: [],
+      hasParking: false,
+      hasShower: false,
+      hasEquipment: false,
+    });
+    setSortOption("default");
+  };
+
+  if (loading) {
+    return (
+      <EmptyState
+        type="loading"
+        message="Загружаем список спортивных объектов..."
+      />
+    );
+  }
+
+  if (error) {
+    return (
+      <EmptyState
+        type="error"
+        message={`Не удалось загрузить данные: ${error}`}
+      />
+    );
+  }
 
   return (
-    <>
-      <div className="mt-10">
-        <section className="mt-10">
-          <motion.h1
-            className="mb-10 text-2xl font-bold text-gray-800 text-center"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            Количество найденных площадок — {arenas.length}
-          </motion.h1>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      className="py-6"
+    >
+      <SearchBar onSearch={setSearchQuery} />
 
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={page}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.4 }}
-              className="grid grid-cols-1 md:grid-cols-2 gap-10"
-            >
-              {paginatedData.map((arena, index) => (
-                <motion.div
-                  key={arena.id}
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.3, delay: index * 0.05 }}
-                >
-                  <CardItem
-                    id={arena.id}
-                    title={arena.name}
-                    imgUrl={arena.photoUrl}
-                    address={arena.address}
-                    price={arena.price}
-                  />
-                </motion.div>
-              ))}
-            </motion.div>
-          </AnimatePresence>
+      <FilterPanel onFilterChange={setFilters} />
 
-          <div className="mt-10 flex gap-2 justify-center">
-            {[...Array(totalPages)].map((_, idx) => (
-              <button
-                key={idx}
-                onClick={() => setPage(idx + 1)}
-                className={`px-4 py-2 border rounded transition ${
-                  page === idx + 1
-                    ? "bg-color-green text-white"
-                    : "bg-white text-gray-800 hover:bg-gray-100"
-                }`}
-              >
-                {idx + 1}
-              </button>
-            ))}
-          </div>
-        </section>
-      </div>
-    </>
+      <ArenaListHeader
+        totalCount={filteredAndSortedArenas.length}
+        onSortChange={setSortOption}
+      />
+
+      {filteredAndSortedArenas.length === 0 ? (
+        <NoResults searchQuery={searchQuery} onReset={resetFilters} />
+      ) : (
+        <>
+          <ArenaGrid arenas={paginatedData} currentPage={page} />
+
+          {totalPages > 1 && (
+            <Pagination
+              currentPage={page}
+              totalPages={totalPages}
+              onPageChange={setPage}
+            />
+          )}
+        </>
+      )}
+    </motion.div>
   );
 };
 

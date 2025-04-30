@@ -9,7 +9,7 @@ const Footer = () => {
         <Wrapper className="pt-14 text-color-white">
           <div className="flex justify-between">
             <div className="flex gap-5">
-              <Link href={'/arena-list'}>
+              <Link href={"/arena-list"}>
                 <p>Забронировать объект</p>
               </Link>
             </div>
